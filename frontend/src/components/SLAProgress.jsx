@@ -5,22 +5,37 @@ export default function SLAProgress({ createdAt }) {
 
   useEffect(() => {
     if (!createdAt) return;
+
     const createdTime = new Date(createdAt).getTime();
-    const now = Date.now();
-    const diff = now - createdTime;
-    const total = 7 * 24 * 60 * 60 * 1000; // 7 dias em ms
-    const percent = Math.min(100, (diff / total) * 100);
-    setProgress(percent);
+    const total = 7 * 24 * 60 * 60 * 1000;
+    const updateProgress = () => {
+      const now = Date.now();
+      const diff = now - createdTime;
+      const percent = Math.min(100, (diff / total) * 100);
+      setProgress(percent);
+    };
+
+    updateProgress();
+    const interval = setInterval(updateProgress, 1000);
+    return () => clearInterval(interval);
   }, [createdAt]);
 
   if (!createdAt) return null;
 
+  const getBarColor = () => {
+    if (progress < 50) return "bg-green-600";
+    if (progress < 80) return "bg-yellow-500";
+    return "bg-red-600";
+  };
+
   return (
-    <div className="h-4 w-full rounded bg-gray-300">
+    <div className="relative h-6 w-full overflow-hidden rounded bg-gray-300">
       <div
-        className="h-4 rounded bg-green-600"
+        className={`h-full ${getBarColor()} flex items-center justify-center text-sm font-medium text-white transition-all duration-1000`}
         style={{ width: `${progress}%` }}
-      ></div>
+      >
+        {Math.floor(progress)}%
+      </div>
     </div>
   );
 }
