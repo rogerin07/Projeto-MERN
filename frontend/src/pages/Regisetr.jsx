@@ -21,7 +21,7 @@ const Register = ({ setUser }) => {
         setUser(userDoc);
         setRedirect(true);
       } catch (error) {
-        alert(`Erro ao cadastrar o usuário: ${error.response.data}`);
+        alert(`Erro ao cadastrar o usuário: ${JSON.stringify(error)}`);
       }
     } else {
       alert("Você precisa preencher o e-mail, o nome e a senha!");
