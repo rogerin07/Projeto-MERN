@@ -1,19 +1,40 @@
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Register from "./pages/Regisetr";
+import UserHome from "./pages/UserHome";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
+import { useState, useEffect } from "react";
 
 axios.defaults.baseURL = import.meta.env.VITE_AXIOS_BASE_URL;
-console.log(import.meta.env);
+axios.defaults.withCredentials = true;
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const axiosGet = async () => {
+      const { data } = await axios.get("/users/profile");
+      setUser(data);
+    };
+    axiosGet();
+  }, []);
+
   return (
     <BrowserRouter>
-      <Header />
+      <Header user={user} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={<Login user={user} setUser={setUser} />}
+        />
+        <Route path="/register" element={<Register setUser={setUser} />} />
+        <Route
+          path="/UserHome"
+          element={<UserHome user={user} setUser={setUser} />}
+        />
       </Routes>
     </BrowserRouter>
   );
