@@ -33,7 +33,7 @@ export default function NewRequestModal({ onClose, onSave }) {
 
   return (
     <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-      <div className="w-full max-w-xl rounded bg-white p-6 shadow-lg">
+      <div className="max-h-[80vh] w-full max-w-xl overflow-y-auto rounded bg-white p-6 shadow-lg">
         <h2 className="mb-4 text-lg font-bold">Nova Requisição</h2>
 
         <label className="mb-2 block">Endereço:</label>
