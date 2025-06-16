@@ -74,15 +74,42 @@ export default function NewRequestModal({ onClose, onSave }) {
     setPhotos([...e.target.files]);
   };
 
-  const handleSave = () => {
-    const newRequest = {
-      id: Date.now(),
-      address,
-      photos,
-      location: position,
-      createdAt: new Date().toISOString(),
-    };
-    onSave(newRequest);
+  const handleSave = async () => {
+    if (!address || !position || photos.length === 0) {
+      alert("Preencha todos os campos e adicione pelo menos uma foto.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("address", address);
+      formData.append("location", JSON.stringify(position));
+      for (let i = 0; i < photos.length; i++) {
+        formData.append("photos", photos[i]);
+      }
+
+      const response = await fetch("http://localhost:3000/requests", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        const err = await response.text();
+        console.error("Erro ao salvar requisição:", err);
+        alert("Erro ao salvar requisição: " + err);
+        return;
+      }
+
+      const savedRequest = await response.json();
+      console.log("Requisição salva com sucesso:", savedRequest);
+
+      if (onSave) onSave(savedRequest);
+      onClose();
+    } catch (err) {
+      console.error("Erro no envio:", err);
+      alert("Erro no envio: " + err.message);
+    }
   };
 
   return (

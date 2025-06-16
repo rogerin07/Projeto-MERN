@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import RequestPanel from "../components/RequestPanel";
 import NewRequestModal from "../components/NewRequestModal";
@@ -9,6 +9,22 @@ function UserHome() {
   const [showModal, setShowModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
 
+  useEffect(() => {
+    fetch("http://localhost:3000/requests", {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Falha ao buscar requisições");
+        return res.json();
+      })
+      .then((data) => {
+        setRequests(data);
+      })
+      .catch((err) => {
+        console.error("Erro ao carregar requisições:", err);
+      });
+  }, []);
+
   const handleNewRequest = (newRequest) => {
     setRequests([...requests, newRequest]);
     setShowModal(false);
@@ -16,7 +32,7 @@ function UserHome() {
 
   const handleUpdateRequest = (updated) => {
     const updatedList = requests.map((r) =>
-      r.id === updated.id ? updated : r,
+      r._id === updated._id ? updated : r,
     );
     setRequests(updatedList);
     setSelectedRequest(null);
