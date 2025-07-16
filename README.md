@@ -19,5 +19,5 @@ Facilitar a comunicação entre moradores e ações de preservação do meio amb
 
 - **Frontend:** React, React Router, React Leaflet, TailwindCSS
 - **Backend:** Node.js, Express.js
-- **Banco de Dados:** MongoDB (para versão completa)
-- **Outros:** LocalStorage (para simulação de armazenamento), Leaflet (mapa), Vite (build), Nominatim(API de geocodificação)
+- **Banco de Dados:** MongoDB 
+- **Outros:** Leaflet (mapa), Vite (build), Nominatim(API de geocodificação)
